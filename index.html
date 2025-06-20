@@ -1,146 +1,251 @@
- <!DOCTYPE html>
- <html lang="en" data-theme="light">
- <head>
-     <meta charset="UTF-8" />
-     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-     <meta name="description" content="A personal daily journal application to record your thoughts and experiences" />
-     <title>My Daily Journal | Track Your Thoughts & Experiences</title>
-     <link rel="stylesheet" href="Style.css" />
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" />
-     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
- </head>
- <body>
-     <div class="container">
-         <header class="header">
-             <div class="title-section">
-                 <h1>📖 My Daily Journal</h1>
-                 <h2 class="sub-heading">An Initiative by Vishesh Khandal</h2>
-             </div>
-             <button id="darkModeToggle" class="dark-mode-btn" aria-label="Toggle dark mode">🌙</button>
-         </header>
-         <section class="quote-section" aria-labelledby="quoteHeading">
-             <h2 id="quoteHeading" class="visually-hidden">Inspirational Quote</h2>
-             <div class="quote-card" role="region" aria-live="polite">
-                 <blockquote id="quoteText">Loading inspirational quote...</blockquote>
-                 <cite id="quoteAuthor"></cite>
-                 <button id="newQuoteBtn" class="quote-btn" aria-label="Get new quote">✨ New Quote</button>
-             </div>
-         </section>
-         <section class="entry-section" aria-labelledby="entryHeading">
-             <h2 id="entryHeading">✍️ Write Your Thoughts</h2>
-             <form id="journalForm" class="input-container">
-                 <div class="form-group">
-                     <label for="entryTitle">Entry Title</label>
-                     <input type="text" id="entryTitle" placeholder="Give your entry a title" required>
-                 </div>
-                 <div class="form-group">
-                     <label for="journalInput">Your Thoughts</label>
-                     <textarea id="journalInput" placeholder="What's on your mind today? Share your thoughts, feelings, experiences..." maxlength="1000" required></textarea>
-                     <div id="charCount" class="char-count">0/1000 characters</div>
-                 </div>
-                 <div class="extra-inputs">
-                     <div class="form-group">
-                         <label for="category">📁 Category:</label>
-                         <select id="category" required>
-                             <option value="" disabled selected>Select a category</option>
-                             <option value="Personal">Personal</option>
-                             <option value="Work">Work</option>
-                             <option value="Ideas">Ideas</option>
-                             <option value="Gratitude">Gratitude</option>
-                             <option value="Other">Other</option>
-                         </select>
-                     </div>
-                     <div class="form-group">
-                         <label for="tags">🏷️ Tags (comma separated):</label>
-                         <input type="text" id="tags" placeholder="e.g. peace, goals, morning" />
-                     </div>
-                     <div class="form-group">
-                         <label for="mood">😊 Mood:</label>
-                         <select id="mood">
-                             <option value="Happy">Happy 😊</option>
-                             <option value="Sad">Sad 😢</option>
-                             <option value="Neutral">Neutral 😐</option>
-                             <option value="Excited">Excited 😃</option>
-                             <option value="Anxious">Anxious 😰</option>
-                             <option value="Angry">Angry 😠</option>
-                         </select>
-                     </div>
-                     <div class="form-group">
-                         <label for="imageUpload">📷 Upload Image:</label>
-                         <input type="file" id="imageUpload" accept="image/*" />
-                         <div id="imagePreview" class="image-preview"></div>
-                     </div>
-                 </div>
-                 <div class="input-footer">
-                     <button type="submit" id="saveEntryBtn" class="btn btn-primary">💾 Save Entry</button>
-                 </div>
-             </form>
-         </section>
-         <section class="entries-section" aria-labelledby="entriesHeading">
-             <div class="entries-header">
-                 <h2 id="entriesHeading">📚 Your Journal Entries</h2>
-                 <div class="entries-controls">
-                     <div class="search-container">
-                         <label for="searchInput" class="visually-hidden">Search entries</label>
-                         <input type="text" id="searchInput" placeholder="🔍 Search entries..." aria-label="Search entries">
-                     </div>
-                     <div class="btn-group">
-                         <button id="exportBtn" class="btn btn-outline" aria-label="Export entries">📄 Export</button>
-                         <button id="clearAllBtn" class="btn btn-danger" aria-label="Clear all entries">🗑️ Clear All</button>
-                     </div>
-                 </div>
-             </div>
-             <div class="filter-section">
-                 <label for="filterCategory">📂 Filter by Category:</label>
-                 <select id="filterCategory">
-                     <option value="">All Categories</option>
-                     <option value="Personal">Personal</option>
-                     <option value="Work">Work</option>
-                     <option value="Ideas">Ideas</option>
-                     <option value="Gratitude">Gratitude</option>
-                     <option value="Other">Other</option>
-                 </select>
-                 <label for="filterMood">😊 Filter by Mood:</label>
-                 <select id="filterMood">
-                     <option value="">All Moods</option>
-                     <option value="Happy">Happy</option>
-                     <option value="Sad">Sad</option>
-                     <option value="Neutral">Neutral</option>
-                     <option value="Excited">Excited</option>
-                     <option value="Anxious">Anxious</option>
-                     <option value="Angry">Angry</option>
-                 </select>
-             </div>
-             <div id="entriesContainer" class="entries-container">
-                 <p class="no-entries">No journal entries yet. Start writing your first entry above! ✨</p>
-             </div>
-         </section>
-         <section class="stats-section" aria-labelledby="statsHeading">
-             <h2 id="statsHeading">📊 Journal Statistics</h2>
-             <div id="statsContainer" class="stats-grid">
-                 <div class="stats-summary">
-                     <h3>Journal Statistics</h3>
-                     <p><strong>Total Entries:</strong> <span id="totalEntries">0</span></p>
-                     <p><strong>Total Words:</strong> <span id="totalWords">0</span></p>
-                     <p><strong>Average Words:</strong> <span id="avgWords">0</span></p>
-                     <p><strong>Oldest Entry:</strong> <span id="oldestEntry">N/A</span></p>
-                     <p><strong>Newest Entry:</strong> <span id="newestEntry">N/A</span></p>
-                 </div>
-                 <div class="stats-charts">
-                     <div class="chart-item">
-                         <canvas id="entriesChart" aria-label="Entries by Month chart"></canvas>
-                     </div>
-                     <div class="chart-item">
-                         <canvas id="categoriesChart" aria-label="Entries by Category chart"></canvas>
-                     </div>
-                     <div class="chart-item">
-                         <canvas id="moodsChart" aria-label="Entries by Mood chart"></canvas>
-                     </div>
-                 </div>
-             </div>
-         </section>
-     </div>
-     <script src="script.js" defer></script>
- </body>
- </html>
  
+<!DOCTYPE html>
+<html lang="en" data-theme="dark"></html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Daily Journal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    
+    <!-- Compact Elegant Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <div class="brand-icon">
+                    <span class="icon-animation">📔</span>
+                </div>
+                <div class="brand-text">
+                    <h1 class="navbar-title">
+                        <span class="title-main">My Daily</span>
+                        <span class="title-accent">Journal</span>
+                    </h1>
+                    <span class="navbar-subtitle">
+                        <span class="subtitle-by">by</span>
+                        <span class="subtitle-name">Vishesh Khandal</span>
+                    </span>
+                </div>
+            </div>
+            
+            <div class="navbar-center">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a href="#home" class="nav-link active" data-section="home">
+                            <i class="bi bi-house-fill"></i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#quotes" class="nav-link" data-section="quotes">
+                            <i class="bi bi-chat-quote-fill"></i>
+                            <span>Quotes</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#write" class="nav-link" data-section="write">
+                            <i class="bi bi-pencil-square"></i>
+                            <span>Write</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#entries" class="nav-link" data-section="entries">
+                            <i class="bi bi-journal-bookmark"></i>
+                            <span>Entries</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#stats" class="nav-link" data-section="stats">
+                            <i class="bi bi-bar-chart-fill"></i>
+                            <span>Statistics</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="navbar-actions">
+                <div class="theme-switcher">
+                    <button class="theme-btn" data-theme="light" title="Light Mode">☀️</button>
+                    <button class="theme-btn" data-theme="dark" title="Dark Mode">🌙</button>
+                    <button class="theme-btn" data-theme="custom" title="Custom Mode">🎨</button>
+                </div>
+                
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Welcome Hero Card -->
+        <section class="hero-welcome" id="home">
+            <div class="hero-content">
+                <div class="hero-stickers">
+                    <span class="sticker sticker-1">🌟</span>
+                    <span class="sticker sticker-2">✍️</span>
+                    <span class="sticker sticker-3">💭</span>
+                    <span class="sticker sticker-4">📚</span>
+                    <span class="sticker sticker-5">💡</span>
+                    <span class="sticker sticker-6">✨</span>
+                </div>
+                <div class="hero-text">
+                    <h1 class="hero-title">
+                        <span class="word">Welcome</span>
+                        <span class="word">to</span>
+                        <span class="word">Your</span>
+                        <span class="word">Journal</span>
+                    </h1>
+                    <p class="hero-subtitle">Start your daily reflection journey</p>
+                    <div class="hero-action">
+                        <button class="hero-btn" onclick="document.getElementById('write').scrollIntoView({behavior: 'smooth'})">
+                            <span>Start Writing</span>
+                            <i class="bi bi-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quote Section -->
+        <section class="quote-section section" id="quotes">
+            <div class="section-header">
+                <h2>💬 Daily Inspiration</h2>
+            </div>
+            <div class="quote-card loaded">
+                <p id="quoteText">"The journey of a thousand miles begins with one step."</p>
+                <span id="quoteAuthor">— Lao Tzu</span>
+                <button id="newQuoteBtn" class="quote-btn">New Quote</button>
+            </div>
+        </section>
+
+        <!-- Entry Form -->
+        <section class="entry-section section" id="write">
+            <div class="input-container">
+                <div class="section-header">
+                    <h2>✍️ Write Your Thoughts</h2>
+                </div>
+                <form id="entryForm">
+                    <div class="form-group">
+                        <label for="entryTitle">Entry Title</label>
+                        <input type="text" id="entryTitle" placeholder="e.g., I am smart">
+                    </div>
+                    <div class="form-group">
+                        <label for="journalInput">Your Thoughts</label>
+                        <textarea id="journalInput" placeholder="What's on your mind today?"></textarea>
+                    </div>
+                    <div class="extra-inputs">
+                        <div class="form-group">
+                            <label for="category">Category</label>
+                            <select id="category">
+                                <option value="Work">Work</option>
+                                <option value="Personal">Personal</option>
+                                <option value="Ideas">Ideas</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="tags">Tags (comma separated)</label>
+                            <input type="text" id="tags" placeholder="e.g., peace, morning">
+                        </div>
+                        <div class="form-group">
+                            <label for="mood">Mood</label>
+                            <select id="mood">
+                                <option value="Happy">Happy</option>
+                                <option value="Sad">Sad</option>
+                                <option value="Anxious">Anxious</option>
+                                <option value="Excited">Excited</option>
+                                <option value="Neutral">Neutral</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="imageUpload">Upload Image</label>
+                            <input type="file" id="imageUpload" accept="image/*">
+                        </div>
+                    </div>
+                    <div class="input-footer">
+                        <span id="charCount">0/1000 characters</span>
+                        <button type="submit" id="saveEntryBtn" class="btn btn-primary">Save Entry</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <!-- Journal Entries -->
+        <section class="entries-section section" id="entries">
+            <div class="entries-header">
+                <div class="section-header">
+                    <h2>📚 Your Journal Entries</h2>
+                </div>
+                <div class="entries-controls"></div>
+            </div>
+            <div class="entries-controls">
+                    <input type="text" id="searchInput" placeholder="Search entries...">
+                    <button id="exportBtn" class="btn btn-outline">Export</button>
+                    <button id="clearAllBtn" class="btn btn-danger">Clear All</button>
+                </div>
+            </div>
+            <div class="filter-section">
+                <label for="filterCategory">Filter by Category:</label>
+                <select id="filterCategory">
+                    <option value="">All Categories</option>
+                    <option value="Work">Work</option>
+                    <option value="Personal">Personal</option>
+                    <option value="Ideas">Ideas</option>
+                    <option value="Other">Other</option>
+                </select>
+                <label for="filterMood">Filter by Mood:</label>
+                <select id="filterMood">
+                    <option value="">All Moods</option>
+                    <option value="Happy">Happy</option>
+                    <option value="Sad">Sad</option>
+                    <option value="Anxious">Anxious</option>
+                    <option value="Excited">Excited</option>
+                    <option value="Neutral">Neutral</option>
+                </select>
+            </div>
+            <div id="entriesContainer" class="entries-container"></div>
+        </section>
+
+        <!-- Statistics Section -->
+        <section class="stats-section section" id="stats">
+            <div class="section-header">
+                <h2>📊 Journal Statistics</h2>
+            </div>
+            <div class="stats-grid">
+                <div class="stats-summary">
+                    <p>Total Entries: <span id="totalEntries">0</span></p>
+                    <p>Total Words: <span id="totalWords">0</span></p>
+                    <p>Average Words: <span id="avgWords">0</span></p>
+                    <p>Oldest Entry: <span id="oldestEntry">N/A</span></p>
+                    <p>Newest Entry: <span id="newestEntry">N/A</span></p>
+                    <button id="quickStatsBtn" class="btn btn-outline">Quick Stats</button>
+                </div>
+                <div class="stats-charts">
+                    <div class="chart-item"><canvas id="entriesChart"></canvas></div>
+                    <div class="chart-item"><canvas id="categoriesChart"></canvas></div>
+                    <div class="chart-item"><canvas id="moodsChart"></canvas></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Stats Modal -->
+        <div id="quickStatsModal" class="modal-overlay">
+            <div class="modal-content">
+                <h3>Quick Stats</h3>
+                <p id="modalStats"></p>
+                <div class="modal-actions">
+                    <button id="closeModal" class="btn btn-primary">Close</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
