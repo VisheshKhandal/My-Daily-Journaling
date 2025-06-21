@@ -1039,8 +1039,12 @@
     }
 
     bindNavbarEvents() {
+        console.log('🔧 Initializing navbar events...');
+        
         // Navigation links
         const navLinks = document.querySelectorAll('.nav-link');
+        console.log('📎 Found nav links:', navLinks.length);
+        
         navLinks.forEach(link => {
             link.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1052,11 +1056,29 @@
         // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
         const navbarNav = document.querySelector('.navbar-nav');
+        
+        console.log('🍔 Mobile menu button found:', !!mobileMenuBtn);
+        console.log('📱 Navbar nav found:', !!navbarNav);
+        
         if (mobileMenuBtn && navbarNav) {
-            mobileMenuBtn.addEventListener('click', () => {
+            console.log('✅ Setting up mobile menu toggle...');
+            mobileMenuBtn.addEventListener('click', (e) => {
+                console.log('🍔 Hamburger clicked!');
+                e.stopPropagation();
+                const isActive = mobileMenuBtn.classList.contains('active');
+                
                 mobileMenuBtn.classList.toggle('active');
                 navbarNav.classList.toggle('active');
+                
+                console.log('🍔 Menu active:', !isActive);
+                
+                // Update ARIA attributes
+                mobileMenuBtn.setAttribute('aria-expanded', !isActive);
             });
+        } else {
+            console.error('❌ Mobile menu elements not found!');
+            console.error('Mobile button:', mobileMenuBtn);
+            console.error('Navbar nav:', navbarNav);
         }
 
         // Close mobile menu on link click
@@ -1067,8 +1089,36 @@
                 if (mobileBtn && nav) {
                     mobileBtn.classList.remove('active');
                     nav.classList.remove('active');
+                    mobileBtn.setAttribute('aria-expanded', 'false');
                 }
             });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const nav = document.querySelector('.navbar-nav');
+            
+            if (mobileBtn && nav && nav.classList.contains('active')) {
+                // Check if click is outside the mobile menu and hamburger button
+                if (!nav.contains(e.target) && !mobileBtn.contains(e.target)) {
+                    mobileBtn.classList.remove('active');
+                    nav.classList.remove('active');
+                    mobileBtn.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+
+        // Close mobile menu on window resize (if switching from mobile to desktop)
+        window.addEventListener('resize', () => {
+            const mobileBtn = document.getElementById('mobileMenuBtn');
+            const nav = document.querySelector('.navbar-nav');
+            
+            if (window.innerWidth > 768 && mobileBtn && nav) {
+                mobileBtn.classList.remove('active');
+                nav.classList.remove('active');
+                mobileBtn.setAttribute('aria-expanded', 'false');
+            }
         });
     }
 
@@ -1137,8 +1187,6 @@
             lastScrollY = currentScrollY;
         });
     }
-
-
 }
 
 // Initialize the app only once when DOM is loaded
@@ -1150,3 +1198,13 @@ if (typeof window.journal === 'undefined') {
         console.log('🎨 Try switching between light, dark, and custom themes');
     });
 }
+
+// Loader overlay logic
+window.addEventListener('DOMContentLoaded', function() {
+    const loader = document.getElementById('loader-overlay');
+    if (loader) {
+        setTimeout(() => {
+            loader.classList.add('hide');
+        }, 3500);
+    }
+});
