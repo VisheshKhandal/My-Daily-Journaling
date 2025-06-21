@@ -1,5 +1,4 @@
- 
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en" data-theme="dark"></html>
 <head>
     <meta charset="UTF-8">
@@ -11,6 +10,22 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
+    <!-- Loader Overlay -->
+    <div id="loader-overlay">
+        <div class="loader-content">
+            <h1 class="loader-title">My Daily Journaling</h1>
+            <h2 class="loader-subtitle">An Initiative By Vishesh Khandal</h2>
+            <div class="loader-stickers">
+                <span class="loader-sticker sticker-1">📔</span>
+                <span class="loader-sticker sticker-2">🌟</span>
+                <span class="loader-sticker sticker-3">✨</span>
+                <span class="loader-sticker sticker-4">💡</span>
+                <span class="loader-sticker sticker-5">✍️</span>
+                <span class="loader-sticker sticker-6">📚</span>
+            </div>
+        </div>
+    </div>
+    <!-- End Loader Overlay -->
     
     <!-- Compact Elegant Navbar -->
     <nav class="navbar" id="navbar">
@@ -30,50 +45,48 @@
                     </span>
                 </div>
             </div>
-            
-            <div class="navbar-center">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a href="#home" class="nav-link active" data-section="home">
-                            <i class="bi bi-house-fill"></i>
-                            <span>Home</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#quotes" class="nav-link" data-section="quotes">
-                            <i class="bi bi-chat-quote-fill"></i>
-                            <span>Quotes</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#write" class="nav-link" data-section="write">
-                            <i class="bi bi-pencil-square"></i>
-                            <span>Write</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#entries" class="nav-link" data-section="entries">
-                            <i class="bi bi-journal-bookmark"></i>
-                            <span>Entries</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#stats" class="nav-link" data-section="stats">
-                            <i class="bi bi-bar-chart-fill"></i>
-                            <span>Statistics</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            
+
+            <!-- Move navbar-nav here -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link active" data-section="home">
+                        <i class="bi bi-house-fill"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#quotes" class="nav-link" data-section="quotes">
+                        <i class="bi bi-chat-quote-fill"></i>
+                        <span>Quotes</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#write" class="nav-link" data-section="write">
+                        <i class="bi bi-pencil-square"></i>
+                        <span>Write</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#entries" class="nav-link" data-section="entries">
+                        <i class="bi bi-journal-bookmark"></i>
+                        <span>Entries</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#stats" class="nav-link" data-section="stats">
+                        <i class="bi bi-bar-chart-fill"></i>
+                        <span>Statistics</span>
+                    </a>
+                </li>
+            </ul>
+
             <div class="navbar-actions">
                 <div class="theme-switcher">
                     <button class="theme-btn" data-theme="light" title="Light Mode">☀️</button>
                     <button class="theme-btn" data-theme="dark" title="Dark Mode">🌙</button>
                     <button class="theme-btn" data-theme="custom" title="Custom Mode">🎨</button>
                 </div>
-                
-                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="navbarNav">
                     <span></span>
                     <span></span>
                     <span></span>
